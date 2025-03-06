@@ -1,8 +1,5 @@
 #include "arraylist.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 struct ArrayList {
     void* buffer;        ///< A pointer to the allocated memory section.
@@ -39,7 +36,7 @@ int ArrayListAdd(ArrayList* list, void* value) {
         
         /* If the realloc failed, return failure */
         if (!list)
-            return 0;
+            return NULL;
 
         list->buffer = newList;
     }
@@ -91,4 +88,20 @@ void* ArrayListGet(ArrayList* list, int index) {
 void ArrayListFree(ArrayList* list) {
     free(list->buffer);
     free(list);
+}
+
+int main() {
+    ArrayList* myList = ArrayListCreate(10, sizeof(char*));
+
+    const char* name = "John";
+    ArrayListAdd(myList, &name);
+    const char** value = ArrayListGet(myList, 0);
+    printf("%s", *value);
+
+    const char* name2 = "Andy";
+    ArrayListAdd(myList, &name2);
+    value = ArrayListGet(myList, 1);
+    printf("%s", *value);
+
+    return 0;
 }
