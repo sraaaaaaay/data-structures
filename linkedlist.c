@@ -1,14 +1,16 @@
 #include "linkedlist.h"
+#include "compare.h"
+#include <string.h>
 
 struct Node {
-    void* value;
-    Node* next;
+    void* value; ///< A pointer to the value (type-agnostic)
+    Node* next;  ///< The next node in the list
 };
 
 struct LinkedList {
-    Node* head;
-    size_t size;
-    size_t element_size;
+    Node* head;          ///< The first value in the linked list
+    size_t size;         ///< The size of the list
+    size_t element_size; ///< The size of a value stored in the list
 };
 
 LinkedList* LinkedListCreate(size_t element_size) {
@@ -30,13 +32,11 @@ int LinkedListAdd(LinkedList* list, void* value) {
     /* Make space for the new node*/
     Node* node = (Node*)malloc(sizeof(Node));
     if (!node) {
-        printf("Couldn't make node");
         return NULL;
     }
     /* Make some space for the new value*/
     node->value = malloc(list->element_size);
     if (!node->value) {
-        printf("Couldn't make node value");
         free(node);
         return NULL;
     }
@@ -62,9 +62,41 @@ int LinkedListAdd(LinkedList* list, void* value) {
 
 int LinkedListGetSize(LinkedList* list) {
     if (!list) {
-        printf("Error getting list size: list does not exist");
         return NULL;
     }
     if (list->size)
         return list->size;
+}
+
+void* LinkedListGetIndex(LinkedList* list, int index) {
+    if (!list)
+        return NULL;
+    if (list->size == 0)
+        return NULL;
+    if (index >= list->size)
+        return NULL;
+
+    int i     = 0;
+    Node* cur = list->head;
+    while (i < index) {
+        cur = cur->next;
+        i++;
+    }
+    return cur->value;
+}
+
+int LinkedListGetValue(LinkedList* list, void* value, compare_func f) {
+    if (!list)
+        return NULL;
+    if (list->size == 0)
+        return NULL;
+
+    Node* cur = list->head;
+
+    while (cur != NULL) {
+        if (f(cur->value, value) == 0) {
+            return 1;
+        }
+    }
+    return 0;
 }

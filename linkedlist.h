@@ -18,6 +18,8 @@ typedef struct Node Node;
 typedef struct LinkedList LinkedList;
 
 
+typedef int (*compare_func)(const void*, const void*);
+
 /**
  * @brief Create a new linked list
  *
@@ -43,6 +45,23 @@ int LinkedListAdd(LinkedList* list, void* value);
  */
 int LinkedListGetSize(LinkedList* list);
 
+/**
+ * @brief Get a linked list element by index
+ *
+ * @param list The list to get from
+ * @param index The index to get
+ * @return void* The value at that index
+ */
+void* LinkedListGetIndex(LinkedList* list, int index);
 
+/**
+ * @brief Search a linked list for a value. Non-standard but done for fun.
+ *
+ * @param list The list to get from.
+ * @param value The value to get.
+ * @param f The callback comparator function (can be compare_ints(), compare_strings() or compare())
+ * @return int 1 if found, otherwise 0
+ */
+int LinkedListGetValue(LinkedList* list, void* value, compare_func f);
 
 #endif
