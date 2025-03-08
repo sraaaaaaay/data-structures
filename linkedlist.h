@@ -60,8 +60,8 @@ void* LinkedListGetIndex(LinkedList* list, int index);
  * @param list The list to get from.
  * @param value The value to get.
  * @param f The callback comparator function (can be compare_ints(), compare_strings() or compare())
- * @return int 1 if found, otherwise 0
+ * @return int 1 if found, -1 if error, 0 if not found
  */
-int LinkedListGetValue(LinkedList* list, void* value, compare_func f);
+int LinkedListContains(LinkedList* list, void* value, compare_func f);
 
 #endif

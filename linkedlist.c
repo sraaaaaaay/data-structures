@@ -85,11 +85,11 @@ void* LinkedListGetIndex(LinkedList* list, int index) {
     return cur->value;
 }
 
-int LinkedListGetValue(LinkedList* list, void* value, compare_func f) {
+int LinkedListContains(LinkedList* list, void* value, compare_func f) {
     if (!list)
-        return NULL;
+        return -1;
     if (list->size == 0)
-        return NULL;
+        return -1;
 
     Node* cur = list->head;
 

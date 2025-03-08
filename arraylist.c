@@ -21,8 +21,10 @@ ArrayList* ArrayListCreate(int initial_capacity, size_t element_size) {
     list->buffer       = (int*)malloc(list->bufsize * element_size);
 
     /* If malloc failed, let the caller handle it */
-    if (!list->buffer)
+    if (!list->buffer) {
+        free(list);
         return NULL;
+    }
 
     return list;
 }
@@ -33,10 +35,10 @@ int ArrayListAdd(ArrayList* list, void* value) {
 
         list->bufsize *= 2;
         void* newList = realloc(list->buffer, list->bufsize * list->element_size);
-        
+
         /* If the realloc failed, return failure */
         if (!list)
-            return NULL;
+            return -1;
 
         list->buffer = newList;
     }
@@ -51,19 +53,12 @@ int ArrayListAdd(ArrayList* list, void* value) {
 
 int ArrayListRemove(ArrayList* list, int index) {
     if (index < 0 || index > list->len) {
-        return 0;
+        return -1;
     }
 
-    // Pointer arithmetic - find where we're copying to (what's the newly-empty memory chunk?)
     char* destination = (char*)list->buffer + (index * list->element_size);
-
-    // Pointer arithmetic - where are we copying from? (start at the next element after the removed one)
-    char* src = destination + list->element_size;
-
-    // How far to the end of the allocated memory?
+    char* src         = destination + list->element_size;
     int bytes_to_move = (list->len - (index - 1)) * list->element_size;
-
-    // Move everything as needed
     if (bytes_to_move > 0) {
         memcpy(destination, src, bytes_to_move);
     }
@@ -85,7 +80,10 @@ void* ArrayListGet(ArrayList* list, int index) {
     return (char*)list->buffer + (index * list->element_size);
 }
 
-void ArrayListFree(ArrayList* list) {
+int ArrayListFree(ArrayList* list) {
+    if (!list)
+        return -1;
     free(list->buffer);
     free(list);
+    return 0;
 }

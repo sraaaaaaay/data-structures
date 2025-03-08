@@ -58,6 +58,6 @@ void* ArrayListGet(ArrayList* list, int index);
  * 
  * @param list The ArrayList to free up.
  */
-void ArrayListFree(ArrayList* list);
+int ArrayListFree(ArrayList* list);
 
 #endif
